@@ -945,6 +945,18 @@ Span<blender::gpu::Batch *> DRW_cache_object_surface_material_get(
   }
 }
 
+blender::gpu::Batch **GOO_cache_object_surface_material_get(Object *ob,
+                                                            GPUMaterial **gpumat_array,
+                                                            uint gpumat_array_len)
+{
+  switch (ob->type) {
+    case OB_MESH:
+      return GOO_cache_mesh_surface_shaded_get(ob, gpumat_array, gpumat_array_len);
+    default:
+      return nullptr;
+  }
+}
+
 /** \} */
 
 /* -------------------------------------------------------------------- */
@@ -2861,6 +2873,16 @@ Span<blender::gpu::Batch *> DRW_cache_mesh_surface_shaded_get(
   using namespace blender::draw;
   BLI_assert(ob->type == OB_MESH);
   return DRW_mesh_batch_cache_get_surface_shaded(*ob, *static_cast<Mesh *>(ob->data), materials);
+}
+
+blender::gpu::Batch **GOO_cache_mesh_surface_shaded_get(Object *ob,
+                                                        GPUMaterial **gpumat_array,
+                                                        uint gpumat_array_len)
+{
+  using namespace blender::draw;
+  BLI_assert(ob->type == OB_MESH);
+  return GOO_mesh_batch_cache_get_surface_shaded(
+      *ob, *static_cast<Mesh *>(ob->data), gpumat_array, gpumat_array_len);
 }
 
 Span<blender::gpu::Batch *> DRW_cache_mesh_surface_texpaint_get(Object *ob)

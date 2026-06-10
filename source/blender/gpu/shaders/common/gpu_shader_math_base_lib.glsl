@@ -94,10 +94,15 @@ float cube_f(float v)
   return v * v * v;
 }
 
+/* WORKAROUND: To be removed once we port all code to use gpu_shader_math_base_lib.glsl. */
+#ifndef GPU_SHADER_MATH_COMMON_UTILS_GLSL
+
 float hypot(float x, float y)
 {
   return sqrt(x * x + y * y);
 }
+
+#endif
 
 /* Declared as _atan2 to prevent errors with `WITH_GPU_SHADER_CPP_COMPILATION` on VS2019 due
  * to `corecrt_math` conflicting functions. */
@@ -131,6 +136,7 @@ uint ceil_to_multiple(uint a, uint b)
   return ((a + b - 1u) / b) * b;
 }
 
+#ifndef COMMON_MATH_LIB_GLSL
 /**
  * Integer division that returns the ceiling, instead of flooring like normal C division.
  * It is undefined if \a a is negative or \b b is not strictly positive.
@@ -143,6 +149,7 @@ uint divide_ceil(uint a, uint b)
 {
   return (a + b - 1u) / b;
 }
+#endif
 
 /**
  * Component wise, use vector to replace min if it is smaller and max if bigger.
@@ -153,6 +160,7 @@ void min_max(float value, inout float min_v, inout float max_v)
   max_v = max(value, max_v);
 }
 
+#ifndef COMMON_MATH_LIB_GLSL
 /**
  * Safe divide `a` by `b`.
  * If `b` equal 0 the result will be 0.
@@ -195,6 +203,7 @@ float safe_acos(float a)
   }
   return acos(a);
 }
+#endif
 
 /**
  * Return true if the difference between`a` and `b` is below the `epsilon` value.

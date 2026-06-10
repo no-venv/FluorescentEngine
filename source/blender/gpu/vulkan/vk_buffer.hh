@@ -45,6 +45,10 @@ class VKBuffer : public NonCopyable {
               VkMemoryPropertyFlags required_flags,
               VkMemoryPropertyFlags preferred_flags,
               VmaAllocationCreateFlags vma_allocation_flags);
+  bool goo_create(size_t size,
+              GPUUsageType usage,
+              VkBufferUsageFlags buffer_usage,
+              bool is_host_visible = true);
   void clear(VKContext &context, uint32_t clear_value);
   void update_immediately(const void *data) const;
 

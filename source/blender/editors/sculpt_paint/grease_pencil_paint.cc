@@ -1591,6 +1591,13 @@ void PaintOperation::on_stroke_done(const bContext &C)
   screen_space_positions.span.slice(points).copy_from(this->screen_space_final_coords_);
   screen_space_positions.finish();
 
+  if ((scene->toolsettings->gpencil_flags & GP_TOOL_FLAG_AUTOCLOSE_STROKE) != 0) {
+    bke::SpanAttributeWriter<bool> cyclic = attributes.lookup_or_add_for_write_span<bool>(
+        "cyclic", bke::AttrDomain::Curve);
+    cyclic.span[active_curve] = true;
+    cyclic.finish();
+  }
+
   /* Remove trailing points with radii close to zero. */
   trim_end_points(drawing, 1e-5f, on_back, active_curve);
 

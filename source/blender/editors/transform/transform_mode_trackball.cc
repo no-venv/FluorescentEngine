@@ -53,7 +53,18 @@ static void transdata_elem_trackball(const TransInfo *t,
   float mat_buf[3][3];
   const float(*mat)[3] = mat_final;
   if (t->flag & T_PROP_EDIT) {
+    if (UNLIKELY(!td->rotmtx_init)) {
+      unit_m3(td->rotmtx);
+      td->rotmtx_init = true;
+    }
     axis_angle_normalized_to_mat3(mat_buf, axis, td->factor * angle);
+
+    /* Apply "continuous" trackball rotation. */
+    if (U.uiflag & USER_ACCUMULATE_TRACKBALL) {
+      mul_m3_m3_post(mat_buf, td->rotmtx);
+      copy_m3_m3(td->rotmtx, mat_buf);
+    }
+
     mat = mat_buf;
   }
   ElementRotation(t, tc, td, mat, t->around);

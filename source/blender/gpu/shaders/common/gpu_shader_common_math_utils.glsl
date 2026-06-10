@@ -8,8 +8,17 @@
 
 #include "gpu_glsl_cpp_stubs.hh"
 
+/* WORKAROUND: to guard against double include in EEVEE. */
+#ifndef GPU_SHADER_MATH_COMMON_UTILS_GLSL
+#  define GPU_SHADER_MATH_COMMON_UTILS_GLSL
+
 /* WORKAROUND: To be removed once we port all code to use `gpu_shader_math_base_lib.glsl`. */
 #ifndef GPU_SHADER_MATH_BASE_LIB_GLSL
+
+float safe_floored_modulo(float a, float b, float c)
+{
+  return (b != 0.0) ? a - floor(a / b) * b : 0.0;
+}
 
 float safe_divide(float a, float b)
 {
@@ -212,3 +221,5 @@ mat3 euler_to_mat3(vec3 euler)
   mat[2][2] = cy * cx;
   return mat;
 }
+
+#endif /* GPU_SHADER_MATH_COMMON_UTILS_GLSL */

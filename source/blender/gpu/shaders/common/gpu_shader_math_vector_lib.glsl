@@ -347,6 +347,7 @@ uvec4 ceil_to_multiple(uvec4 a, uvec4 b)
   return ((a + b - 1u) / b) * b;
 }
 
+#ifndef COMMON_MATH_LIB_GLSL
 ivec2 divide_ceil(ivec2 a, ivec2 b)
 {
   return (a + b - 1) / b;
@@ -371,6 +372,7 @@ uvec4 divide_ceil(uvec4 a, uvec4 b)
 {
   return (a + b - 1u) / b;
 }
+#endif
 
 void min_max(vec2 vector, inout vec2 min_v, inout vec2 max_v)
 {
@@ -388,6 +390,7 @@ void min_max(vec4 vector, inout vec4 min_v, inout vec4 max_v)
   max_v = max(vector, max_v);
 }
 
+#ifndef GPU_SHADER_MATH_COMMON_UTILS_GLSL
 vec2 safe_divide(vec2 a, vec2 b)
 {
   return select(vec2(0), a / b, notEqual(b, vec2(0)));
@@ -413,6 +416,7 @@ vec4 safe_divide(vec4 a, float b)
 {
   return (b != 0.0) ? (a / b) : vec4(0);
 }
+#endif
 
 float length_manhattan(vec2 a)
 {
@@ -453,6 +457,7 @@ float distance_manhattan(vec4 a, vec4 b)
   return length_manhattan(a - b);
 }
 
+#ifndef COMMON_MATH_LIB_GLSL
 float distance_squared(vec2 a, vec2 b)
 {
   return length_squared(a - b);
@@ -465,6 +470,7 @@ float distance_squared(vec4 a, vec4 b)
 {
   return length_squared(a - b);
 }
+#endif
 
 vec3 project(vec3 p, vec3 v_proj)
 {
@@ -548,6 +554,7 @@ vec4 safe_normalize_and_get_length(vec4 vector, out float out_length)
   return vec4(1.0, 0.0, 0.0, 0.0);
 }
 
+#ifndef COMMON_MATH_LIB_GLSL
 vec2 safe_normalize(vec2 vector)
 {
   float unused_length = 0.0;
@@ -576,6 +583,7 @@ vec4 safe_rcp(vec4 a)
 {
   return select(vec4(0.0), (1.0 / a), notEqual(a, vec4(0.0)));
 }
+#endif
 
 vec2 interpolate(vec2 a, vec2 b, float t)
 {

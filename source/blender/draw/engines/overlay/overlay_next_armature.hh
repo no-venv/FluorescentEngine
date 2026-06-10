@@ -485,6 +485,7 @@ class Armatures : Overlay {
     float const_wire = 0.0f;
 
     bool do_relations = false;
+    bool isolate_bones = false;
     bool transparent = false;
     bool show_relations = false;
     bool draw_envelope_distance = false;

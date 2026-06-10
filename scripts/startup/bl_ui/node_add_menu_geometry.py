@@ -34,6 +34,7 @@ class NODE_MT_geometry_node_GEO_COLOR(Menu):
         layout = self.layout
         node_add_menu.add_node_type(layout, "ShaderNodeBlackbody")
         node_add_menu.add_node_type(layout, "ShaderNodeValToRGB")
+        node_add_menu.add_node_type(layout, "ShaderNodeOKLabColorRamp")
         node_add_menu.add_node_type(layout, "ShaderNodeRGBCurve")
         layout.separator()
         node_add_menu.add_node_type(layout, "FunctionNodeCombineColor")
@@ -577,6 +578,7 @@ class NODE_MT_category_GEO_TEXTURE(Menu):
         node_add_menu.add_node_type(layout, "ShaderNodeTexVoronoi")
         node_add_menu.add_node_type(layout, "ShaderNodeTexWave")
         node_add_menu.add_node_type(layout, "ShaderNodeTexWhiteNoise")
+        node_add_menu.add_node_type(layout, "ShaderNodeTexHexagon")   
         node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
 
 

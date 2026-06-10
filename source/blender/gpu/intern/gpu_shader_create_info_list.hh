@@ -119,6 +119,17 @@
 #include "draw_object_infos_info.hh"
 #include "draw_view_info.hh"
 
+/* Goo engine. */
+#include "eevee_legacy_bloom_info.hh"
+#include "eevee_legacy_common_info.hh"
+#include "eevee_legacy_dof_info.hh"
+#include "eevee_legacy_effects_info.hh"
+#include "eevee_legacy_lightprobe_info.hh"
+#include "eevee_legacy_material_info.hh"
+#include "eevee_legacy_motion_blur_info.hh"
+#include "eevee_legacy_shadow_info.hh"
+#include "eevee_legacy_volume_info.hh"
+
 /* EEVEE engine. */
 #include "eevee_ambient_occlusion_info.hh"
 #include "eevee_common_info.hh"

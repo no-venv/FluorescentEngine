@@ -435,6 +435,7 @@ enum eButType {
   UI_BTYPE_PULLDOWN = 27 << 9,
   UI_BTYPE_ROUNDBOX = 28 << 9,
   UI_BTYPE_COLORBAND = 30 << 9,
+  UI_BTYPE_OKLAB_COLORBAND = 29 << 9,
   /** sphere widget (used to input a unit-vector, aka normal) */
   UI_BTYPE_UNITVEC = 31 << 9,
   UI_BTYPE_CURVE = 32 << 9,
@@ -2629,6 +2630,7 @@ void uiTemplatePreview(uiLayout *layout,
                        ID *parent,
                        MTex *slot,
                        const char *preview_id);
+void uiTemplateOKLabColorRamp(uiLayout *layout, PointerRNA *ptr, const char *propname, bool expand);
 void uiTemplateColorRamp(uiLayout *layout,
                          PointerRNA *ptr,
                          blender::StringRefNull propname,

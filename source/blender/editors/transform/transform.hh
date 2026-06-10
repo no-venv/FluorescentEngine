@@ -502,6 +502,9 @@ struct TransData : public TransDataBasic {
   TransDataCurveHandleFlags *hdata;
   /** If set, copy of Object or #bPoseChannel protection. */
   short protectflag;
+  /** Local rotation accumulator for Trackball (is initialized) */
+  short rotmtx_init;
+  float rotmtx[3][3];
 };
 
 /* -------------------------------------------------------------------- */

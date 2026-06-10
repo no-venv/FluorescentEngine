@@ -2182,7 +2182,7 @@ void Armatures::draw_armature_pose(Armatures::DrawContext *ctx)
     if (!is_pose_select) {
       draw_bone_relations(ctx, draw_strat, bone_ptr, boneflag);
     }
-
+    
     draw_strat.update_display_matrix(bone_ptr);
     draw_strat.draw_bone(ctx, bone_ptr, boneflag, select_id);
 

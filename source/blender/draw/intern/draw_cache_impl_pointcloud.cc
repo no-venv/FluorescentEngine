@@ -418,6 +418,11 @@ gpu::VertBuf **DRW_pointcloud_evaluated_attribute(PointCloud *pointcloud, const 
   return &cache.eval_cache.attributes_buf[request_i];
 }
 
+int DRW_pointcloud_material_count_get(const PointCloud *pointcloud)
+{
+  return max_ii(1, pointcloud->totcol);
+}
+
 void DRW_pointcloud_batch_cache_create_requested(Object *ob)
 {
   PointCloud *pointcloud = static_cast<PointCloud *>(ob->data);
