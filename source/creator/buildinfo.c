@@ -52,4 +52,6 @@ char build_linkflags[] = "unmaintained buildsystem alert!";
 char build_system[] = "unmaintained buildsystem alert!";
 #  endif
 
+int TIFFFaxBlackCodes;
+int TIFFFaxWhiteCodes;
 #endif  // BUILD_DATE
