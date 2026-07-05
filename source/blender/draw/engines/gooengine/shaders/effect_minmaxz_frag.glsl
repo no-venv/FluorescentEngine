@@ -55,10 +55,17 @@ void main()
   float val = minmax4(samp.x, samp.y, samp.z, samp.w);
 #endif
 
-#if (defined(GPU_INTEL) || defined(GPU_ATI)) && defined(GPU_OPENGL)
+#if  defined(GPU_ATI) && defined(GPU_OPENGL)
   /* Use color format instead of 24bit depth texture */
   gl_FragColor = vec4(val);
 #endif
+
+#if defined(GPU_INTEL) && defined(GPU_OPENGL)
+  /* Use color format instead of 24bit depth texture */
+  fragColor = vec4(val);
+#endif
+
+
 
 #if !(defined(GPU_INTEL) && defined(GPU_OPENGL))
   /* If using Intel workaround, do not write out depth as there will be no depth target and this is
