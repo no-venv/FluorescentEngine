@@ -86,6 +86,19 @@ struct DefaultFramebufferList {
   GPUFrameBuffer *color_only_fb;
   GPUFrameBuffer *depth_only_fb;
   GPUFrameBuffer *overlay_only_fb;
+  // backport rt passes
+  // GPUFrameBuffer *emission_fb;
+  // GPUFrameBuffer *environment_fb;
+  // GPUFrameBuffer *ao_fb;
+  // GPUFrameBuffer *shadow_fb;
+  // GPUFrameBuffer *transparent_fb;
+  // GPUFrameBuffer *diffuse_light_fb;
+  // GPUFrameBuffer *diffuse_color_fb;
+  // GPUFrameBuffer *specular_light_fb;
+  // GPUFrameBuffer *specular_color_fb;
+  // GPUFrameBuffer *volume_light_fb;
+  // GPUFrameBuffer *position_fb;
+  // GPUFrameBuffer *normal_fb;
 };
 
 struct DefaultTextureList {
@@ -93,6 +106,19 @@ struct DefaultTextureList {
   GPUTexture *color_overlay;
   GPUTexture *depth;
   GPUTexture *depth_in_front;
+  // backport rt passes
+  GPUTexture *emission;
+  GPUTexture *environment;
+  GPUTexture *ao;
+  GPUTexture *shadow;
+  GPUTexture *diffuse_light;
+  GPUTexture *diffuse_color;
+  GPUTexture *specular_light;
+  GPUTexture *specular_color;
+  GPUTexture *volume_light;
+  GPUTexture *normal;
+  GPUTexture *bloom;
+  GPUTexture *transparent;
 };
 
 struct DRWViewData;

@@ -27,7 +27,7 @@
 #include "eevee_private.hh"
 
 #include "eevee_engine.h" /* own include */
-
+#include <iostream>
 #define EEVEE_ENGINE "BLENDER_EEVEE"
 
 /* *********** FUNCTIONS *********** */
@@ -82,6 +82,114 @@ static void eevee_engine_init(void *ved)
   EEVEE_materials_init(sldata, vedata, stl, fbl);
   EEVEE_shadows_init(sldata);
   EEVEE_lightprobes_init(sldata, vedata);
+}
+struct RTTexture {
+  GPUTexture *texture;
+  GPUFrameBuffer *fb;
+};
+
+static GPUTexture *create_rt_texture(const char *name,
+                                   int width,
+                                   int height,
+                                   eGPUTextureFormat format)
+{
+  const eGPUTextureUsage usage = GPU_TEXTURE_USAGE_SHADER_WRITE | GPU_TEXTURE_USAGE_SHADER_READ | GPU_TEXTURE_USAGE_ATTACHMENT;
+  GPUTexture *texture = GPU_texture_create_2d(name, width, height, 1, format, usage, nullptr);
+  // GPUFrameBuffer *fb;
+  // GPU_framebuffer_ensure_config(&fb, {GPU_ATTACHMENT_NONE, GPU_ATTACHMENT_TEXTURE(texture)});
+  return texture;
+}
+
+static void eevee_free_rt_pass()
+{
+  // safely clean up the textures
+  DefaultTextureList *dtxl = DRW_viewport_texture_list_get();
+  GPU_TEXTURE_FREE_SAFE(dtxl->emission);
+  GPU_TEXTURE_FREE_SAFE(dtxl->environment);
+  GPU_TEXTURE_FREE_SAFE(dtxl->ao);
+  GPU_TEXTURE_FREE_SAFE(dtxl->shadow);
+  GPU_TEXTURE_FREE_SAFE(dtxl->transparent);
+  GPU_TEXTURE_FREE_SAFE(dtxl->diffuse_light);
+  GPU_TEXTURE_FREE_SAFE(dtxl->diffuse_color);
+  GPU_TEXTURE_FREE_SAFE(dtxl->specular_light);
+  GPU_TEXTURE_FREE_SAFE(dtxl->specular_color);
+  GPU_TEXTURE_FREE_SAFE(dtxl->normal);
+}
+
+static void eevee_init_rt_pass(EEVEE_Data *vedata)
+{
+  // inits or refreshes the render passes, if needed
+  eGPUTextureUsage usage = GPU_TEXTURE_USAGE_SHADER_READ | GPU_TEXTURE_USAGE_ATTACHMENT;
+  DefaultTextureList *dtxl = DRW_viewport_texture_list_get();
+  DefaultFramebufferList *dfbl = DRW_viewport_framebuffer_list_get();
+
+  // refer to the colour buffer to determine if the texture has changed resolution
+  int width = GPU_texture_width(dtxl->color);
+  int height = GPU_texture_height(dtxl->color);
+
+  int normal_width = 0;
+  int normal_height = 0;
+  bool refresh_needed = false;
+
+  // if (txl->diff_color_accum == nullptr){
+  //   std::cout << "nullptr diff_color_accum\n";
+  // }
+    // dtxl->ao = vedata->txl->spec_color_accum;
+
+  if (dtxl->normal) {
+    normal_width = GPU_texture_width(dtxl->normal);
+    normal_height = GPU_texture_height(dtxl->normal);
+    refresh_needed = (normal_width != width) || (normal_height != height);
+  }
+
+  if (dtxl->normal == nullptr || refresh_needed) {
+    eevee_free_rt_pass();
+    // init required
+    // GPUTexture *normal = GPU_texture_create_2d(
+    //     "normal_pass", width, height, 1, GPU_RGBA16F, usage, nullptr);
+    // GPUFrameBuffer *normal_fb;
+    // GPU_framebuffer_ensure_config(&normal_fb,
+    //                               {GPU_ATTACHMENT_NONE, GPU_ATTACHMENT_TEXTURE(normal)});
+    GPUTexture *emission = create_rt_texture("emission_pass", width, height, GPU_RGBA8);
+    GPUTexture *environment = create_rt_texture("environment_pass", width, height, GPU_RGBA8);
+    GPUTexture *ao = create_rt_texture("ao_pass", width, height, GPU_R8);
+    GPUTexture *shadow = create_rt_texture("shadow_pass", width, height, GPU_R8);
+    GPUTexture *transparent = create_rt_texture("transparent_pass", width, height, GPU_RGBA16F);
+    GPUTexture *diffuse_light = create_rt_texture("diffuse_light_pass", width, height, GPU_RGBA8);
+    GPUTexture *diffuse_colour = create_rt_texture("diffuse_colour_pass", width, height, GPU_RGBA8);
+    GPUTexture *specular_light = create_rt_texture("specular_light_pass", width, height, GPU_RGBA8);
+    GPUTexture *specular_colour = create_rt_texture("specular_colour_pass", width, height, GPU_R8);
+    GPUTexture *normal = create_rt_texture("normal_pass", width, height, GPU_RGBA16F);
+
+    dtxl->emission = emission;
+    // dfbl->emission_fb = emission.fb;
+
+    dtxl->environment = environment;
+    // dfbl->environment_fb = environment.fb;
+
+    dtxl->ao = ao;
+    // dfbl->ao_fb = ao.fb;
+
+    dtxl->shadow = shadow;
+    // dfbl->shadow_fb = shadow.fb;
+
+    dtxl->transparent = transparent;
+    // dfbl->transparent_fb = transparent.fb;
+
+    dtxl->diffuse_light = diffuse_light;
+    // dfbl->diffuse_light_fb = diffuse_light.fb;
+
+    dtxl->diffuse_color = diffuse_colour;
+    // dfbl->diffuse_color_fb = diffuse_colour.fb;
+
+    dtxl->specular_light = specular_light;
+    // dfbl->specular_light_fb = specular_light.fb;
+
+    dtxl->specular_color = specular_colour;
+    // dfbl->specular_color_fb = specular_colour.fb;
+    dtxl->normal = normal;
+    // dfbl->normal_fb = normal.fb;
+  }
 }
 
 static void eevee_cache_init(void *vedata)
@@ -206,6 +314,7 @@ static void eevee_cache_finish(void *vedata)
  * to reduce the fill-rate. */
 static void eevee_draw_scene(void *vedata)
 {
+  eevee_init_rt_pass((EEVEE_Data *)vedata);
   EEVEE_PassList *psl = ((EEVEE_Data *)vedata)->psl;
   EEVEE_StorageList *stl = ((EEVEE_Data *)vedata)->stl;
   EEVEE_FramebufferList *fbl = ((EEVEE_Data *)vedata)->fbl;
@@ -258,7 +367,7 @@ static void eevee_draw_scene(void *vedata)
     EEVEE_shadows_update(sldata, static_cast<EEVEE_Data *>(vedata));
     EEVEE_lightprobes_refresh(sldata, static_cast<EEVEE_Data *>(vedata));
     EEVEE_lightprobes_refresh_planar(sldata, static_cast<EEVEE_Data *>(vedata));
-  
+
     /* Refresh shadows */
     EEVEE_shadows_draw(sldata, static_cast<EEVEE_Data *>(vedata), stl->effects->taa_view);
 
@@ -373,7 +482,9 @@ static void eevee_draw_scene(void *vedata)
     DRW_transform_none(stl->effects->final_tx);
   }
   else {
-    EEVEE_renderpasses_draw(sldata, static_cast<EEVEE_Data *>(vedata));
+     GPU_framebuffer_bind(dfbl->default_fb);
+    DRW_transform_none(stl->effects->final_tx);
+    // EEVEE_renderpasses_draw(sldata, static_cast<EEVEE_Data *>(vedata));
   }
 
   if (stl->effects->bypass_drawing) {
@@ -633,6 +744,7 @@ static void eevee_store_metadata(void *vedata, RenderResult *render_result)
 
 static void eevee_engine_free()
 {
+  eevee_free_rt_pass();
   EEVEE_shaders_free();
   EEVEE_lightprobes_free();
   EEVEE_materials_free();

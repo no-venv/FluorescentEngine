@@ -19,7 +19,8 @@
 #include "DEG_depsgraph_query.hh"
 
 #include "eevee_private.hh"
-
+#include "render_types.h"
+#include <iostream>
 enum eRenderPassPostProcessType {
   PASS_POST_UNDEFINED = 0,
   PASS_POST_ACCUMULATED_COLOR = 1,
@@ -132,6 +133,49 @@ void EEVEE_renderpasses_init(EEVEE_Data *vedata)
     g_data->render_passes = (enabled_render_passes & EEVEE_RENDERPASSES_ALL) |
                             EEVEE_RENDER_PASS_COMBINED;
   }
+  // Pretty much ignore everything that just happened above, and inject our own render passes
+
+  stl->g_data->render_passes = eViewLayerEEVEEPassType::EEVEE_RENDER_PASS_COMBINED;
+  if (view_layer->passflag & SCE_PASS_AO) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_AO;
+  }
+
+  if (view_layer->passflag & SCE_PASS_DIFFUSE_COLOR) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_DIFFUSE_COLOR;
+  }
+
+  if (view_layer->passflag & SCE_PASS_DIFFUSE_DIRECT) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_DIFFUSE_LIGHT;
+  }
+
+  if (view_layer->passflag & SCE_PASS_EMIT) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_EMIT;
+  }
+
+  if (view_layer->passflag & SCE_PASS_ENVIRONMENT) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_ENVIRONMENT;
+  }
+
+  if (view_layer->passflag & SCE_PASS_GLOSSY_COLOR) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_SPECULAR_COLOR;
+  }
+
+  if (view_layer->passflag & SCE_PASS_GLOSSY_DIRECT) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_SPECULAR_LIGHT;
+  }
+
+  if (view_layer->passflag & SCE_PASS_NORMAL) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_NORMAL;
+  }
+
+  if (view_layer->passflag & SCE_PASS_SHADOW) {
+    stl->g_data->render_passes |= EEVEE_RENDER_PASS_SHADOW;
+  }
+
+  //  if (view_layer->passflag & SCE_PASS_) {
+  //   stl->g_data->render_passes |= EEVEE_RENDER_PASS_SHADOW;
+  // }
+
   EEVEE_material_renderpasses_init(vedata);
   EEVEE_material_transparent_output_init(vedata);
   EEVEE_cryptomatte_renderpasses_init(vedata);
