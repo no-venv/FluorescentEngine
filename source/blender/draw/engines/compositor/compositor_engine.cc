@@ -165,10 +165,54 @@ class Context : public compositor::Context {
       return compositor::Result(*this);
     }
 
-    /* The combined pass is a special case where we return the viewport color texture, because it
-     * includes Grease Pencil objects since GP is drawn using their own engine. */
+    GPUTexture *combined_texture = nullptr;
     if (STREQ(pass_name, RE_PASSNAME_COMBINED)) {
-      GPUTexture *combined_texture = DRW_viewport_texture_list_get()->color;
+      /* The combined pass is a special case where we return the viewport color texture, because it
+       * includes Grease Pencil objects since GP is drawn using their own engine. */
+      combined_texture = DRW_viewport_texture_list_get()->color;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_EMIT)) {
+      combined_texture = DRW_viewport_texture_list_get()->emission;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_ENVIRONMENT)) {
+      combined_texture = DRW_viewport_texture_list_get()->environment;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_AO)) {
+      combined_texture = DRW_viewport_texture_list_get()->ao;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_SHADOW)) {
+      combined_texture = DRW_viewport_texture_list_get()->shadow;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_TRANSPARENT)) {
+      combined_texture = DRW_viewport_texture_list_get()->transparent;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_DIFFUSE_DIRECT)) {
+      combined_texture = DRW_viewport_texture_list_get()->diffuse_light;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_DIFFUSE_COLOR)) {
+      combined_texture = DRW_viewport_texture_list_get()->diffuse_color;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_GLOSSY_DIRECT)){
+      combined_texture = DRW_viewport_texture_list_get()->specular_light;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_GLOSSY_COLOR)){
+      combined_texture = DRW_viewport_texture_list_get()->specular_color;
+    }
+
+    if (STREQ(pass_name, RE_PASSNAME_NORMAL)){
+      combined_texture = DRW_viewport_texture_list_get()->normal;
+    }
+
+    if (combined_texture != nullptr) {
       compositor::Result pass = compositor::Result(*this, GPU_texture_format(combined_texture));
       pass.wrap_external(combined_texture);
       return pass;
