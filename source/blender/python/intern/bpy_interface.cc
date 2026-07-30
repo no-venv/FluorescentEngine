@@ -64,6 +64,7 @@
 #include "../generic/imbuf_py_api.hh"
 #include "../gpu/gpu_py_api.hh"
 #include "../mathutils/mathutils.hh"
+#include "../fluorescent/fluorescent_py_api.hh"
 
 /* Logging types to use anywhere in the Python modules. */
 
@@ -266,6 +267,7 @@ PyObject *BPyInit_hydra();
 #endif
 
 static _inittab bpy_internal_modules[] = {
+    {"fluorescent",BPyInit_fluorescent},
     {"mathutils", PyInit_mathutils},
 #if 0
     {"mathutils.geometry", PyInit_mathutils_geometry},

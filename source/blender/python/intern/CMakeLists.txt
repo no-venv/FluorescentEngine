@@ -129,7 +129,7 @@ set(LIB
   PRIVATE bf::intern::guardedalloc
   PRIVATE bf::animrig
   bf_python_gpu
-
+  bf_python_fluorescent
   ${PYTHON_LINKFLAGS}
   ${PYTHON_LIBRARIES}
   PRIVATE bf::windowmanager

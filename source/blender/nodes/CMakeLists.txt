@@ -91,6 +91,7 @@ set(SRC
   intern/socket_search_link.cc
   intern/socket_usage_inference.cc
   intern/value_elem.cc
+  intern/node_glsl_helper.cc
 
   NOD_common.hh
   NOD_composite.hh
@@ -126,6 +127,7 @@ set(SRC
   NOD_texture.h
   NOD_value_elem.hh
   NOD_value_elem_eval.hh
+  NOD_glsl_helper.hh
   intern/node_common.h
   intern/node_exec.hh
   intern/node_util.hh

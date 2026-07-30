@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022-2023 Blender Authors
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
-
+import fluorescent.compositor
 from bpy.types import Menu
 from bl_ui import node_add_menu
 from bpy.app.translations import (
@@ -165,6 +165,25 @@ class NODE_MT_category_compositor_filter(Menu):
         node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
 
 
+class NODE_MT_category_compositor_custom_shader(Menu):
+    bl_idname = "NODE_MT_category_compositor_custom_shader"
+    bl_label = "Shader"
+
+    def draw(self, _context):
+        layout = self.layout
+        for shader in fluorescent.compositor.get_loaded_compute_shaders():
+            props = node_add_menu.add_node_type(layout, "CompositorNodeCustomGlsl",label=shader)
+            shader_type_prop = props.settings.add()
+            shader_type_prop.name = "shader_name"
+            # DANGEROUS!!!!! THE VALUE IS EVALUATED
+            shader_type_prop.value = f"'{shader}'"
+            node_name = props.settings.add()
+            node_name.name = "bl_label"
+            node_name.value = f"'{shader}'"
+
+        # node_add_menu.add_node_type(layout, "CompositorNodeCustomGlsl")
+        node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
+
 class NODE_MT_category_compositor_filter_blur(Menu):
     bl_idname = "NODE_MT_category_compositor_filter_blur"
     bl_label = "Blur"
@@ -179,7 +198,6 @@ class NODE_MT_category_compositor_filter_blur(Menu):
         node_add_menu.add_node_type(layout, "CompositorNodeVecBlur")
 
         node_add_menu.draw_assets_for_catalog(layout, "Filter/Blur")
-
 
 class NODE_MT_category_compositor_group(Menu):
     bl_idname = "NODE_MT_category_compositor_group"
@@ -326,7 +344,7 @@ class NODE_MT_compositor_node_add_all(Menu):
         layout.separator()
         layout.menu("NODE_MT_category_compositor_group")
         layout.menu("NODE_MT_category_layout")
-
+        layout.menu("NODE_MT_category_compositor_custom_shader")
         node_add_menu.draw_root_assets(layout)
 
 
@@ -348,6 +366,7 @@ classes = (
     NODE_MT_category_compositor_utilities,
     NODE_MT_category_compositor_vector,
     NODE_MT_category_compositor_group,
+    NODE_MT_category_compositor_custom_shader,
 )
 
 if __name__ == "__main__":  # only for live edit.

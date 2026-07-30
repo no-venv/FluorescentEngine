@@ -788,6 +788,8 @@ static const char *node_get_static_idname(int type, int treetype)
         return "CompositorNodeTrackPos";
       case CMP_NODE_PIXELATE:
         return "CompositorNodePixelate";
+      case CMP_NODE_CUSTOM_GLSL:
+        return "CompositorNodeCustomGlsl";
       case TEX_NODE_OUTPUT:
         return "TextureNodeOutput";
       case TEX_NODE_CHECKER:

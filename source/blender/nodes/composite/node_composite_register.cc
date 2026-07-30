@@ -111,4 +111,5 @@ void register_composite_nodes()
   register_node_type_cmp_view_levels();
   register_node_type_cmp_viewer();
   register_node_type_cmp_zcombine();
+  register_node_type_cmp_custom_glsl();
 }

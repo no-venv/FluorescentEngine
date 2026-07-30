@@ -1167,6 +1167,10 @@ typedef struct NodeBilateralBlurData {
   char _pad[2];
 } NodeBilateralBlurData;
 
+typedef struct NodeCompositorCustomGLSL {
+  char shader_name[1024];
+} NodeCompositorCustomGLSL;
+
 typedef struct NodeKuwaharaData {
   short size DNA_DEPRECATED;
   short variation;

@@ -8986,6 +8986,13 @@ static void def_cmp_zcombine(BlenderRNA * /*brna*/, StructRNA *srna)
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 }
 
+static void def_cmp_custom_glsl(BlenderRNA * /*brna*/, StructRNA *srna){
+  PropertyRNA *prop;
+  RNA_def_struct_sdna_from(srna, "NodeCompositorCustomGLSL", "storage");
+  prop = RNA_def_property(srna, "shader_name", PROP_STRING, PROP_FILEPATH);
+  RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
+}
+
 static void def_cmp_ycc(BlenderRNA * /*brna*/, StructRNA *srna)
 {
   PropertyRNA *prop;
@@ -12661,7 +12668,7 @@ static void rna_def_nodes(BlenderRNA *brna)
   define("ShaderNode", "ShaderNodeTwirl", def_sh_twirl);
   define("ShaderNode", "ShaderNodeWaterRipples", def_sh_water_ripples);
   define("ShaderNode", "ShaderNodeOKLabColorRamp", def_oklab_colorramp);
-  
+
   define("CompositorNode", "CompositorNodeAlphaOver", def_cmp_alpha_over);
   define("CompositorNode", "CompositorNodeAntiAliasing", def_cmp_antialiasing);
   define("CompositorNode", "CompositorNodeBilateralblur", def_cmp_bilateral_blur);
@@ -12761,7 +12768,7 @@ static void rna_def_nodes(BlenderRNA *brna)
   define("CompositorNode", "CompositorNodeVecBlur", def_cmp_vector_blur);
   define("CompositorNode", "CompositorNodeViewer", def_cmp_viewer);
   define("CompositorNode", "CompositorNodeZcombine", def_cmp_zcombine);
-
+  define("CompositorNode", "CompositorNodeCustomGlsl",def_cmp_custom_glsl);
   define("TextureNode", "TextureNodeAt");
   define("TextureNode", "TextureNodeBricks", def_tex_bricks);
   define("TextureNode", "TextureNodeChecker");

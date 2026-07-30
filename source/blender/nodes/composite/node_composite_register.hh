@@ -107,3 +107,4 @@ void register_node_type_cmp_vecblur();
 void register_node_type_cmp_view_levels();
 void register_node_type_cmp_viewer();
 void register_node_type_cmp_zcombine();
+void register_node_type_cmp_custom_glsl();
