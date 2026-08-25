@@ -624,6 +624,8 @@ static const char *node_get_static_idname(int type, int treetype)
         return "ShaderNodeTexBrick";
       case SH_NODE_TEX_COORD:
         return "ShaderNodeTexCoord";
+      case SH_NODE_CUSTOM_GLSL:
+        return "ShaderNodeCustomGlsl";
       case CMP_NODE_VIEWER:
         return "CompositorNodeViewer";
       case CMP_NODE_RGB:

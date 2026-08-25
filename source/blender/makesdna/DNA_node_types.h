@@ -1167,9 +1167,28 @@ typedef struct NodeBilateralBlurData {
   char _pad[2];
 } NodeBilateralBlurData;
 
+typedef struct InternalGlslUniform {
+  int type;
+  int qualifier;
+  char name[16];
+  char _pad[4];
+} InternalGlslUniform;
+
 typedef struct NodeCompositorCustomGLSL {
+  int is_file_shader;
+  int uniform_size;
   char shader_name[1024];
+  char _pad_2[16];
+  InternalGlslUniform uniforms[32];
 } NodeCompositorCustomGLSL;
+
+typedef struct NodeShaderCustomGLSL {
+  int is_file_shader;
+  int uniform_size;
+  char shader_name[1024];
+  char _pad_2[16];
+  InternalGlslUniform uniforms[32];
+} NodeShaderCustomGLSL;
 
 typedef struct NodeKuwaharaData {
   short size DNA_DEPRECATED;
