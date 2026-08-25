@@ -188,6 +188,7 @@ GPUNodeLink *GPU_image_sky(GPUMaterial *mat,
                            float *layer,
                            GPUSamplerState sampler_state);
 GPUNodeLink *GPU_color_band(GPUMaterial *mat, int size, float *pixels, float *r_row);
+GPUNodeLink *GPU_texture(GPUMaterial *mat, GPUTexture *texture);
 
 /**
  * Create an implementation defined differential calculation of a float function.
@@ -375,6 +376,7 @@ struct GPUMaterialTexture {
   bool iuser_available;
   GPUTexture **colorband;
   GPUTexture **sky;
+  GPUTexture *texture;
   char sampler_name[32];       /* Name of sampler in GLSL. */
   char tiled_mapping_name[32]; /* Name of tile mapping sampler in GLSL. */
   int users;

@@ -1037,6 +1037,9 @@ template<class T> inline void PassBase<T>::material_set(Manager &manager, GPUMat
       /* Color Ramp */
       bind_texture(tex->sampler_name, *tex->colorband);
     }
+    else if (tex->texture) {
+      bind_texture(tex->sampler_name, tex->texture, tex->sampler_state);
+    }
     else if (tex->sky) {
       /* Sky */
       bind_texture(tex->sampler_name, *tex->sky, tex->sampler_state);

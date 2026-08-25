@@ -1377,7 +1377,7 @@ void DRW_buffer_add_entry_array(DRWCallBuffer *callbuf, const void *attr[], uint
 /** \name Draw Call (DRW_calls)
  * \{ */
 
- static void drw_shgroup_init(DRWShadingGroup *shgroup, GPUShader *shader)
+static void drw_shgroup_init(DRWShadingGroup *shgroup, GPUShader *shader)
 {
   shgroup->uniforms = nullptr;
   shgroup->uniform_attrs = nullptr;
@@ -1581,6 +1581,9 @@ void DRW_shgroup_add_material_resources(DRWShadingGroup *grp, GPUMaterial *mater
     else if (tex->colorband) {
       /* Color Ramp */
       DRW_shgroup_uniform_texture(grp, tex->sampler_name, *tex->colorband);
+    }
+    else if (tex->texture) {
+      DRW_shgroup_uniform_texture_ex(grp, tex->sampler_name, tex->texture, tex->sampler_state);
     }
     else if (tex->sky) {
       /* Sky */
