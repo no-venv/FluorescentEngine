@@ -15,10 +15,10 @@ set(INC_SYS
 
 set(SRC
   fluorescent_py_api.cc
-  fluorescent_py_compositor.cc
+  fluorescent_py_shaders.cc
 
   fluorescent_py_api.hh
-  fluorescent_py_compositor.hh
+  fluorescent_py_shaders.hh
 )
 
 set(LIB

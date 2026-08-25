@@ -58,6 +58,8 @@ set(INC
   ../depsgraph
   ../makesrna
   ../modifiers
+  ../gpu
+  ../gpu/intern
 
   # RNA_prototypes.hh
   ${CMAKE_BINARY_DIR}/source/blender/makesrna

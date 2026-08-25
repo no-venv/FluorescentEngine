@@ -9,6 +9,10 @@ set(INC
   ../../editors/include
   ../../makesrna
   ../../../../intern/sky/include
+  ../../gpu/intern
+  ../../draw
+  ../../draw/intern
+  ../../draw/engines/gooengine
   # RNA_prototypes.hh
   ${CMAKE_BINARY_DIR}/source/blender/makesrna
 )
@@ -41,6 +45,8 @@ set(SRC
   nodes/node_shader_camera.cc
   nodes/node_shader_clamp.cc
   nodes/node_shader_color_ramp.cc
+  nodes/node_shader_custom_glsl.cc
+  nodes/node_shader_image.cc
   nodes/node_shader_oklab_color_ramp.cc
   nodes/node_shader_tex_hexagon.cc
   nodes/node_shader_twirl.cc
