@@ -32,3 +32,6 @@ struct GPUFunction {
 };
 
 GPUFunction *gpu_material_library_use_function(GSet *used_libraries, const char *name);
+
+void add_runtime_shader_source(const char *datatoc, const char *filename, const char *filepath);
+void remove_runtime_shader_source(const char *filename, const char *func_name);

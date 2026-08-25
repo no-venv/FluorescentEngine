@@ -433,6 +433,27 @@ static GPUSourceDictionnary *g_sources = nullptr;
 static GPUFunctionDictionnary *g_functions = nullptr;
 static bool force_printf_injection = false;
 
+void add_runtime_shader_source(const char *datatoc, const char *filename, const char *filepath)
+{
+  GPUSource *gsrc = new GPUSource(filepath, filename, datatoc, g_functions, g_formats);
+  g_sources->add_new(filename, gsrc);
+}
+
+void remove_runtime_shader_source(const char *filename, const char *func_name)
+{
+
+  if (filename == nullptr) {
+    g_functions->remove(func_name);
+    return;
+  }
+
+  GPUSource *shader_src = g_sources->lookup_default(filename, nullptr);
+  if (shader_src != nullptr) {
+    g_functions->remove(func_name);
+    g_sources->remove(filename);
+  }
+}
+
 void gpu_shader_dependency_init()
 {
   g_formats = new GPUPrintFormatMap();

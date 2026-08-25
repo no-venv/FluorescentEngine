@@ -39,6 +39,9 @@ constexpr static int GPU_MAX_UNIFORM_ATTR = 8;
 /** \name Creation
  * \{ */
 
+
+std::string preprocess_source(blender::StringRefNull original);
+
 /**
  * Create a shader using the given #GPUShaderCreateInfo.
  * Can return a null pointer if compilation fails.

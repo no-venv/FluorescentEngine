@@ -292,13 +292,14 @@ GPUShader *GPU_shader_create_from_info(const GPUShaderCreateInfo *_info)
   return wrap(Context::get()->compiler->compile(info, false));
 }
 
-static std::string preprocess_source(StringRefNull original)
+std::string preprocess_source(StringRefNull original)
 {
   if (original.is_empty()) {
     return original;
   }
   gpu::shader::Preprocessor processor;
-  return processor.process(original);
+  auto no_err_report = [](std::smatch, const char *) {};
+  return processor.process(original, "", true, true, true, true, true, no_err_report);
 };
 
 GPUShader *GPU_shader_create_from_info_python(const GPUShaderCreateInfo *_info)
