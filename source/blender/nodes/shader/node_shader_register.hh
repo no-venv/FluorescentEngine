@@ -124,3 +124,6 @@ void register_node_type_sh_sdf_primitive();
 void register_node_type_sh_sdf_op();
 void register_node_type_sh_sdf_vector_op();
 void register_node_type_sh_sdf_noise();
+
+void register_node_type_sh_custom_glsl();
+void register_node_type_sh_image();

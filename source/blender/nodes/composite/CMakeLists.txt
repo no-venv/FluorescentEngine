@@ -5,6 +5,7 @@
 set(INC
   .
   ..
+  ../base/include
   ../intern
   ../../editors/include
   ../../compositor

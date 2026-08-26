@@ -44,6 +44,7 @@ add_subdirectory(function)
 add_subdirectory(geometry)
 add_subdirectory(shader)
 add_subdirectory(texture)
+add_subdirectory(base)
 
 set(INC
   PUBLIC .
@@ -53,6 +54,7 @@ set(INC
   intern
   shader
   texture
+  base
   ../animrig
   ../editors/include
   ../depsgraph
@@ -148,6 +150,7 @@ set(LIB
   PRIVATE bf::gpu
   PRIVATE bf::imbuf
   PRIVATE bf::intern::guardedalloc
+  bf_nodes_base
   bf_nodes_composite
   bf_nodes_function
   bf_nodes_geometry

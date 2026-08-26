@@ -39,6 +39,7 @@ void register_shader_nodes()
   register_node_type_sh_combhsv();
   register_node_type_sh_combrgb();
   register_node_type_sh_combxyz();
+  register_node_type_sh_custom_glsl();
   register_node_type_sh_tex_hexagon();
   register_node_type_sh_twirl();
   register_node_type_sh_water_ripples();
@@ -125,4 +126,5 @@ void register_shader_nodes()
   register_node_type_sh_sdf_op();
   register_node_type_sh_sdf_vector_op();
   register_node_type_sh_sdf_noise();
+  register_node_type_sh_image();
 }

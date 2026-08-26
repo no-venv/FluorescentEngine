@@ -5301,6 +5301,15 @@ static void def_sh_mix(BlenderRNA * /*brna*/, StructRNA *srna)
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 }
 
+static void def_sh_custom_glsl(BlenderRNA * /*brna*/, StructRNA *srna)
+{
+  PropertyRNA *prop;
+  RNA_def_struct_sdna_from(srna, "NodeShaderCustomGLSL", "storage");
+  prop = RNA_def_property(srna, "shader_name", PROP_STRING, PROP_FILEPATH);
+  RNA_def_property_string_sdna(prop, nullptr, "base.shader_name");
+  RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
+}
+
 static void def_float_to_int(BlenderRNA * /*brna*/, StructRNA *srna)
 {
   PropertyRNA *prop;
@@ -6207,8 +6216,7 @@ static void def_sh_shader_info(BlenderRNA *brna, StructRNA *srna)
 
   prop = RNA_def_property(srna, "use_own_light_groups", PROP_BOOLEAN, PROP_NONE);
   RNA_def_property_boolean_sdna(prop, nullptr, "use_own_light_groups", 1);
-  RNA_def_property_ui_text(
-      prop, "Light Groups", "Set light groups for this node separately");
+  RNA_def_property_ui_text(prop, "Light Groups", "Set light groups for this node separately");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 }
 
@@ -6217,7 +6225,6 @@ static void def_sh_twirl(BlenderRNA *brna, StructRNA *srna)
   RNA_def_struct_sdna_from(srna, "NodeTwirl", "storage");
   def_sh_tex(brna, srna);
 }
-
 
 static void def_sh_water_ripples(BlenderRNA *brna, StructRNA *srna)
 {
@@ -8986,10 +8993,12 @@ static void def_cmp_zcombine(BlenderRNA * /*brna*/, StructRNA *srna)
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 }
 
-static void def_cmp_custom_glsl(BlenderRNA * /*brna*/, StructRNA *srna){
+static void def_cmp_custom_glsl(BlenderRNA * /*brna*/, StructRNA *srna)
+{
   PropertyRNA *prop;
   RNA_def_struct_sdna_from(srna, "NodeCompositorCustomGLSL", "storage");
   prop = RNA_def_property(srna, "shader_name", PROP_STRING, PROP_FILEPATH);
+  RNA_def_property_string_sdna(prop, nullptr, "base.shader_name");
   RNA_def_property_update(prop, NC_NODE | NA_EDITED, "rna_Node_update");
 }
 
@@ -12582,6 +12591,8 @@ static void rna_def_nodes(BlenderRNA *brna)
   define("ShaderNode", "ShaderNodeCombineHSV");
   define("ShaderNode", "ShaderNodeCombineRGB");
   define("ShaderNode", "ShaderNodeCombineXYZ");
+  define("ShaderNode", "ShaderNodeCustomGlsl",def_sh_custom_glsl);
+  define("ShaderNode", "ShaderNodeInputImage", def_geo_image);
   define("ShaderNode", "ShaderNodeDisplacement", def_sh_displacement);
   define("ShaderNode", "ShaderNodeEeveeSpecular");
   define("ShaderNode", "ShaderNodeEmission");

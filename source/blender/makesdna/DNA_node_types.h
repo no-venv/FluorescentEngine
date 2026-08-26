@@ -1174,20 +1174,19 @@ typedef struct InternalGlslUniform {
   char _pad[4];
 } InternalGlslUniform;
 
-typedef struct NodeCompositorCustomGLSL {
+typedef struct NodeGlslBase {
   int is_file_shader;
   int uniform_size;
   char shader_name[1024];
   char _pad_2[16];
   InternalGlslUniform uniforms[32];
+} NodeGlslBase;
+typedef struct NodeCompositorCustomGLSL {
+  NodeGlslBase base;
 } NodeCompositorCustomGLSL;
 
 typedef struct NodeShaderCustomGLSL {
-  int is_file_shader;
-  int uniform_size;
-  char shader_name[1024];
-  char _pad_2[16];
-  InternalGlslUniform uniforms[32];
+  NodeGlslBase base;
 } NodeShaderCustomGLSL;
 
 typedef struct NodeKuwaharaData {
