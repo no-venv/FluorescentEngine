@@ -5,7 +5,7 @@
 #include <Python.h>
 
 #include "fluorescent_py_api.hh" /* Own include. */
-#include "fluorescent_py_compositor.hh"
+#include "fluorescent_py_shaders.hh"
 /* -------------------------------------------------------------------- */
 
 PyDoc_STRVAR(
@@ -33,7 +33,7 @@ PyObject *BPyInit_fluorescent()
 
   mod = PyModule_Create(&fluorescent_module_def);
 
-  PyModule_AddObject(mod, "compositor", (submodule = bpy_fluorescent_compositor_init()));
+  PyModule_AddObject(mod, "shaders", (submodule = bpy_fluorescent_shaders_init()));
   PyDict_SetItem(sys_modules, PyModule_GetNameObject(submodule), submodule);
   return mod;
 }

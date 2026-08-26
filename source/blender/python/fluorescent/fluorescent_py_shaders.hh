@@ -5,4 +5,4 @@
 #pragma once
 #include <Python.h>
 
-PyObject *bpy_fluorescent_compositor_init();
+PyObject *bpy_fluorescent_shaders_init();

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022-2023 Blender Authors
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
-
+import fluorescent.shaders
 from bpy.types import Menu
 from bl_ui import node_add_menu
 from bpy.app.translations import (
@@ -13,22 +13,19 @@ from bpy.app.translations import (
 # only show input/output nodes when editing line style node trees
 def line_style_shader_nodes_poll(context):
     snode = context.space_data
-    return (snode.tree_type == 'ShaderNodeTree' and
-            snode.shader_type == 'LINESTYLE')
+    return snode.tree_type == 'ShaderNodeTree' and snode.shader_type == 'LINESTYLE'
 
 
 # only show nodes working in world node trees
 def world_shader_nodes_poll(context):
     snode = context.space_data
-    return (snode.tree_type == 'ShaderNodeTree' and
-            snode.shader_type == 'WORLD')
+    return snode.tree_type == 'ShaderNodeTree' and snode.shader_type == 'WORLD'
 
 
 # only show nodes working in object node trees
 def object_shader_nodes_poll(context):
     snode = context.space_data
-    return (snode.tree_type == 'ShaderNodeTree' and
-            snode.shader_type == 'OBJECT')
+    return snode.tree_type == 'ShaderNodeTree' and snode.shader_type == 'OBJECT'
 
 
 def cycles_shader_nodes_poll(context):
@@ -40,13 +37,11 @@ def eevee_shader_nodes_poll(context):
 
 
 def object_not_eevee_shader_nodes_poll(context):
-    return (object_shader_nodes_poll(context) and
-            not eevee_shader_nodes_poll(context))
+    return object_shader_nodes_poll(context) and not eevee_shader_nodes_poll(context)
 
 
 def object_eevee_shader_nodes_poll(context):
-    return (object_shader_nodes_poll(context) and
-            eevee_shader_nodes_poll(context))
+    return object_shader_nodes_poll(context) and eevee_shader_nodes_poll(context)
 
 
 class NODE_MT_category_shader_input(Menu):
@@ -77,6 +72,7 @@ class NODE_MT_category_shader_input(Menu):
         node_add_menu.add_node_type(layout, "ShaderNodeValue")
         node_add_menu.add_node_type(layout, "ShaderNodeVolumeInfo")
         node_add_menu.add_node_type(layout, "ShaderNodeWireframe")
+        node_add_menu.add_node_type(layout, "ShaderNodeInputImage")
 
         node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
 
@@ -180,10 +176,7 @@ class NODE_MT_category_shader_shader(Menu):
             "ShaderNodeBsdfHairPrincipled",
             poll=object_not_eevee_shader_nodes_poll(context),
         )
-        node_add_menu.add_node_type(
-            layout,
-            "ShaderNodeVolumePrincipled"
-        )
+        node_add_menu.add_node_type(layout, "ShaderNodeVolumePrincipled")
         node_add_menu.add_node_type(
             layout,
             "ShaderNodeBsdfRayPortal",
@@ -361,6 +354,29 @@ class NODE_MT_category_shader_script(Menu):
         node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
 
 
+class NODE_MT_category_custom_shader(Menu):
+    bl_idname = "NODE_MT_category_custom_shader"
+    bl_label = "Custom Shaders"
+
+    def draw(self, _context):
+        layout = self.layout
+        node_add_menu.add_node_type(layout, "ShaderNodeCustomGlsl",label="Custom Shader From File")
+        # node_add_menu.add_node_type(layout, "ShaderNodeScript")
+        for shader  in fluorescent.shaders.get_loaded_material_shaders():
+            if not ("PY_" in shader):
+                continue
+            props = node_add_menu.add_node_type(layout, "ShaderNodeCustomGlsl", label=shader)
+            shader_type_prop = props.settings.add()
+            shader_type_prop.name = "shader_name"
+            # DANGEROUS!!!!! THE VALUE IS EVALUATED
+            shader_type_prop.value = f"'{shader}'"
+            node_name = props.settings.add()
+            node_name.name = "bl_label"
+            node_name.value = f"'{shader}'"
+
+        node_add_menu.draw_assets_for_catalog(layout, self.bl_label)
+
+
 class NODE_MT_category_shader_group(Menu):
     bl_idname = "NODE_MT_category_shader_group"
     bl_label = "Group"
@@ -388,6 +404,7 @@ class NODE_MT_shader_node_add_all(Menu):
         layout.menu("NODE_MT_category_shader_vector")
         layout.menu("NODE_MT_category_goo_engine")
         layout.separator()
+        layout.menu("NODE_MT_category_custom_shader")
         layout.menu("NODE_MT_category_shader_script")
         layout.separator()
         layout.menu("NODE_MT_category_shader_group")
@@ -408,10 +425,12 @@ classes = (
     NODE_MT_category_goo_engine,
     NODE_MT_category_shader_script,
     NODE_MT_category_shader_group,
+    NODE_MT_category_custom_shader,
 )
 
 
 if __name__ == "__main__":  # only for live edit.
     from bpy.utils import register_class
+
     for cls in classes:
         register_class(cls)

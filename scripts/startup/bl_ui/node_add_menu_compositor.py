@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022-2023 Blender Authors
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
-import fluorescent.compositor
+import fluorescent.shaders
 from bpy.types import Menu
 from bl_ui import node_add_menu
 from bpy.app.translations import (
@@ -171,7 +171,7 @@ class NODE_MT_category_compositor_custom_shader(Menu):
 
     def draw(self, _context):
         layout = self.layout
-        for shader in fluorescent.compositor.get_loaded_compute_shaders():
+        for shader in fluorescent.shaders.get_loaded_compute_shaders():
             props = node_add_menu.add_node_type(layout, "CompositorNodeCustomGlsl",label=shader)
             shader_type_prop = props.settings.add()
             shader_type_prop.name = "shader_name"
