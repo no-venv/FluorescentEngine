@@ -2,7 +2,6 @@
 #pragma once
 
 #include "GPU_shader.hh"
-#include "NOD_node_declaration.hh"
 #include "NOD_socket_declarations.hh"
 
 #include <filesystem>
@@ -42,6 +41,7 @@ struct InMemoryShaderData {
   std::string material_filename;
   std::string material_filepath;
   std::string material_entry_point;
+  std::string uid;
   std::vector<GlslUniform> uniforms = {};
   std::vector<std::string> void_functions = {};
 };
@@ -99,7 +99,7 @@ class NodeGlslHelper {
                                            const char *shader_name,
                                            ShaderType shader_type);
 
-   GPUTexture *placeholder_sampler2d_tex();
+  GPUTexture *placeholder_sampler2d_tex();
 };
 
 extern NodeGlslHelper global_glsl_helper;

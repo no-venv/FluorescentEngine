@@ -352,6 +352,11 @@ InMemoryShaderData *NodeGlslHelper::set_shader(const char *shader_name,
   std::string buffer_str = std::string(code);
   InMemoryShaderData *memshader = get_shader(shader_name, shader_type, true);
   GPU_SHADER_FREE_SAFE(memshader->shader);
+  // generate a uid for this run
+  auto uuid = BLI_uuid_generate_random();
+  char uuid_str[37];
+  BLI_uuid_format(uuid_str, uuid);
+  memshader->uid = std::string(uuid_str);
 
   if (shader_type == ShaderType::COMPOSITOR) {
     const std::regex layout_header_regex(
