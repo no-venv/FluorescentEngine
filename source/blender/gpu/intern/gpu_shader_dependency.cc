@@ -441,17 +441,8 @@ void add_runtime_shader_source(const char *datatoc, const char *filename, const 
 
 void remove_runtime_shader_source(const char *filename, const char *func_name)
 {
-
-  if (filename == nullptr) {
-    g_functions->remove(func_name);
-    return;
-  }
-
-  GPUSource *shader_src = g_sources->lookup_default(filename, nullptr);
-  if (shader_src != nullptr) {
-    g_functions->remove(func_name);
-    g_sources->remove(filename);
-  }
+  g_functions->remove(func_name);
+  g_sources->remove(filename);
 }
 
 void gpu_shader_dependency_init()
