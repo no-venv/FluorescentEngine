@@ -219,6 +219,8 @@ using NodeMaterialXFunction = void (*)(void *data, bNode *node, bNodeSocket *out
  * Initial attributes and constants for a node as well as callback functions
  * implementing the node behavior.
  */
+enum NODE_FREE_REASON { OPERATOR, UNDEFINED };
+
 struct bNodeType {
   std::string idname;
   /** See bNode::type_legacy. */
@@ -280,6 +282,7 @@ struct bNodeType {
    * while freeing #Main, the state of this ID is undefined.
    * Higher level logic to remove the node handles the user-count.
    */
+  void (*freefunc_verbose)(bNode *node, NODE_FREE_REASON free_reason) = nullptr;
   void (*freefunc)(bNode *node) = nullptr;
   /** Make a copy of the node instance. */
   void (*copyfunc)(bNodeTree *dest_ntree, bNode *dest_node, const bNode *src_node) = nullptr;
@@ -662,7 +665,11 @@ void node_unique_id(bNodeTree *ntree, bNode *node);
 /**
  * Delete node, associated animation data and ID user count.
  */
-void node_remove_node(Main *bmain, bNodeTree *ntree, bNode *node, bool do_id_user);
+void node_remove_node(Main *bmain,
+                      bNodeTree *ntree,
+                      bNode *node,
+                      bool do_id_user,
+                      NODE_FREE_REASON free_reason = NODE_FREE_REASON::UNDEFINED);
 
 void node_dimensions_get(const bNode *node, float *r_width, float *r_height);
 void node_tag_update_id(bNode *node);
@@ -982,7 +989,9 @@ void node_socket_move_default_value(Main &bmain,
  *
  * \note ID user reference-counting and changing the `nodes_by_id` vector are up to the caller.
  */
-void node_free_node(bNodeTree *tree, bNode *node);
+void node_free_node(bNodeTree *tree,
+                    bNode *node,
+                    NODE_FREE_REASON free_reason = NODE_FREE_REASON::UNDEFINED);
 
 /**
  * Iterate over all ID usages of the given node.

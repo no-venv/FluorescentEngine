@@ -1984,7 +1984,7 @@ static int node_delete_exec(bContext *C, wmOperator * /*op*/)
 
   LISTBASE_FOREACH_MUTABLE (bNode *, node, &snode->edittree->nodes) {
     if (node->flag & SELECT) {
-      bke::node_remove_node(bmain, snode->edittree, node, true);
+      bke::node_remove_node(bmain, snode->edittree, node, true, bke::NODE_FREE_REASON::OPERATOR);
     }
   }
 

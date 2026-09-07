@@ -3502,7 +3502,7 @@ void node_rebuild_id_vector(bNodeTree *node_tree)
   }
 }
 
-void node_free_node(bNodeTree *ntree, bNode *node)
+void node_free_node(bNodeTree *ntree, bNode *node, NODE_FREE_REASON free_reason)
 {
   /* since it is called while free database, node->id is undefined */
 
@@ -3521,6 +3521,10 @@ void node_free_node(bNodeTree *ntree, bNode *node)
 
   if (node->typeinfo->freefunc) {
     node->typeinfo->freefunc(node);
+  }
+
+  if (node->typeinfo->freefunc_verbose) {
+    node->typeinfo->freefunc_verbose(node, free_reason);
   }
 
   LISTBASE_FOREACH_MUTABLE (bNodeSocket *, sock, &node->inputs) {
@@ -3572,7 +3576,11 @@ void node_tree_free_local_node(bNodeTree *ntree, bNode *node)
   node_rebuild_id_vector(ntree);
 }
 
-void node_remove_node(Main *bmain, bNodeTree *ntree, bNode *node, const bool do_id_user)
+void node_remove_node(Main *bmain,
+                      bNodeTree *ntree,
+                      bNode *node,
+                      const bool do_id_user,
+                      NODE_FREE_REASON free_reason)
 {
   BLI_assert(ntree != nullptr);
   /* This function is not for localized node trees, we do not want
@@ -3617,7 +3625,7 @@ void node_remove_node(Main *bmain, bNodeTree *ntree, bNode *node, const bool do_
   node_unlink_attached(ntree, node);
 
   /* Free node itself. */
-  node_free_node(ntree, node);
+  node_free_node(ntree, node, free_reason);
   node_rebuild_id_vector(ntree);
 }
 
